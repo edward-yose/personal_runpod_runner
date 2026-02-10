@@ -1,0 +1,25 @@
+name: vllm-gpt-oss-20b
+
+docker:
+  dockerfile: Dockerfile
+  context: .
+
+env:
+  HF_TOKEN: ${HF_TOKEN}
+
+gpu:
+  type: "A40"
+  count: 1
+
+scaling:
+  min_workers: 0
+  max_workers: 3
+  idle_timeout: 300
+
+# Handler configuration - critical!
+handler:
+  file: handler.py
+  function: async_handler  # Use async_handler directly
+  
+# Set to true if using streaming
+return_aggregate_stream: true
