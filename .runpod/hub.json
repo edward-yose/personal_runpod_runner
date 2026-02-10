@@ -1,0 +1,117 @@
+{
+  "name": "vLLM GPT-OSS-20B Inference",
+  "version": "1.0.0",
+  "description": "Production-ready vLLM inference deployment for openai/gpt-oss-20b from Hugging Face",
+  "category": "language_models",
+  "tags": [
+    "vllm",
+    "gpt",
+    "language-model",
+    "huggingface",
+    "inference",
+    "20b"
+  ],
+  "author": {
+    "name": "Edward Yose",
+    "email": "edward-yose@treessolutions.com"
+  },
+  "license": "MIT",
+  "model": {
+    "name": "openai/gpt-oss-20b",
+    "source": "huggingface",
+    "url": "https://huggingface.co/openai/gpt-oss-20b",
+    "architecture": "GPT",
+    "parameters": "20B"
+  },
+  "runtime": {
+    "handler": "handler.py",
+    "docker": {
+      "image": "runpod/pytorch:2.1.0-py3.10-cuda12.1.1-devel-ubuntu22.04"
+    },
+    "python_version": "3.10",
+    "cuda_version": "12.1"
+  },
+  "requirements": {
+    "gpu": {
+      "min_vram_gb": 40,
+      "recommended_vram_gb": 48,
+      "gpu_types": ["NVIDIA A40", "NVIDIA A100", "NVIDIA RTX A6000"]
+    },
+    "system": {
+      "min_cpu_cores": 8,
+      "min_ram_gb": 32,
+      "min_disk_gb": 50
+    }
+  },
+  "inputs": {
+    "schema": {
+      "type": "object",
+      "required": ["prompt"],
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "description": "Text prompt for generation"
+        },
+        "max_tokens": {
+          "type": "integer",
+          "default": 512,
+          "minimum": 1,
+          "maximum": 4096
+        },
+        "temperature": {
+          "type": "number",
+          "default": 0.7,
+          "minimum": 0.0,
+          "maximum": 2.0
+        },
+        "top_p": {
+          "type": "number",
+          "default": 0.9,
+          "minimum": 0.0,
+          "maximum": 1.0
+        }
+      }
+    },
+    "example": {
+      "prompt": "Write a Python function:",
+      "max_tokens": 200,
+      "temperature": 0.7
+    }
+  },
+  "outputs": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "output": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["success", "failed"]
+        }
+      }
+    }
+  },
+  "features": {
+    "streaming": true,
+    "async": true,
+    "gpu_acceleration": true
+  },
+  "environment_variables": {
+    "required": [
+      {
+        "name": "HF_TOKEN",
+        "description": "Hugging Face token for model access",
+        "secret": true
+      }
+    ]
+  },
+  "support": {
+    "email": "edward-yose@treessolutions.com"
+  },
+  "metadata": {
+    "deployed_by": "edward-yose",
+    "organization": "Trees Solutions",
+    "deployment_purpose": "development_inference"
+  }
+}
