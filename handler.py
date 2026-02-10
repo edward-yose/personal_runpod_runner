@@ -76,6 +76,5 @@ def handler(job):
     """Synchronous wrapper for RunPod"""
     return asyncio.run(async_handler(job))
 
-if __name__ == "__main__":
-    logger.info("Starting RunPod serverless handler...")
-    runpod.serverless.start({"handler": handler})
+
+runpod.serverless.start({"handler": handler})
